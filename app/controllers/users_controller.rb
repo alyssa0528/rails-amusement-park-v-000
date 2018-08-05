@@ -6,9 +6,15 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
-    redirect_to user_path(@user)
-    session[:user_id] = @user.id
+    #raise params.inspect
+    @user = User.new(user_params)
+
+    if @user.save
+      redirect_to user_path(@user)
+      session[:user_id] = @user.id
+    else
+      render :new
+    end 
   end
 
   def show
@@ -21,6 +27,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :password, :nausea, :happiness, :tickets, :height)
+    params.require(:user).permit(:name, :password, :nausea, :happiness, :tickets, :height, :admin)
   end
 end
